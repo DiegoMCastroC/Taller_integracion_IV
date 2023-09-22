@@ -10,16 +10,24 @@ import {
 } from 'react-native';
 
 import fondo from './assets/4.png';
+import { login } from './componentes/verificador'; // Importa la función login desde api.js
 
 const LoginScreen = () => {
-  const [username, setUsername] = useState('');
+  const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    if (username == '' || password == '') {
+  const handleLogin = async () => {
+    if (correo === '' || password === '') {
       Alert.alert('Error', 'Por favor, completa todos los campos.');
     } else {
-      Alert.alert('Éxito', 'Has iniciado sesión correctamente.');
+      const result = await login(correo, password);
+
+      if (result.success) {
+        Alert.alert('Éxito', result.message);
+        // Aquí puedes realizar acciones adicionales después del inicio de sesión exitoso
+      } else {
+        Alert.alert('Error', result.message);
+      }
     }
   };
 
@@ -29,12 +37,12 @@ const LoginScreen = () => {
       <View style={[styles.container]}>
       <Text style={[styles.title1, { marginTop: 280 },]}>Inicio de sesion</Text>
 
-        <Text style={[styles.title2,{ marginTop: 30 }]}>Nombre de usuario</Text>
+        <Text style={[styles.title2,{ marginTop: 30 }]}>Correo</Text>
         <TextInput
           style={styles.input}
           placeholder="Ingrese su correo electronico"
-          onChangeText={(text) => setUsername(text)}
-          value={username}
+          onChangeText={(text) => setCorreo(text)}
+          value={correo}
         />
         <Text style={styles.title2}>Contraseña</Text>
         <TextInput
