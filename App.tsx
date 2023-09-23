@@ -8,22 +8,24 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-
 import fondo from './assets/4.png';
 import { login } from './componentes/verificador'; // Importa la función login desde api.js
+import { Main } from './componentes/main';
 
 const LoginScreen = () => {
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
+  const [mostrarMain, setMostrarMain] = useState(false); // Estado para controlar si se muestra Main
 
   const handleLogin = async () => {
     if (correo === '' || password === '') {
-      Alert.alert('Error', 'Por favor, completa todos los campos.');
+      setMostrarMain(true); // Establece el estado para mostrar Main
     } else {
       const result = await login(correo, password);
 
       if (result.success) {
         Alert.alert('Éxito', result.message);
+        
         // Aquí puedes realizar acciones adicionales después del inicio de sesión exitoso
       } else {
         Alert.alert('Error', result.message);
@@ -31,12 +33,15 @@ const LoginScreen = () => {
     }
   };
 
+  // Renderiza el componente Main si mostrarMain es true
+  if (mostrarMain) {
+    return <Main />;
+  }
+
   return (
-
-     <ImageBackground source={fondo} style={styles.background}>
+    <ImageBackground source={fondo} style={styles.background}>
       <View style={[styles.container]}>
-      <Text style={[styles.title1, { marginTop: 280 },]}>Inicio de sesion</Text>
-
+        <Text style={[styles.title1, { marginTop: 280 },]}>Inicio de sesion</Text>
         <Text style={[styles.title2,{ marginTop: 30 }]}>Correo</Text>
         <TextInput
           style={styles.input}
@@ -54,9 +59,9 @@ const LoginScreen = () => {
         />
         <Button title="Iniciar Sesión" onPress={handleLogin} />
         <Text style={[styles.title3, { marginTop: 30 }]}>¿No tienes una cuenta? Registrate</Text>
-        <Text style={styles.title3}>Olvide mi contraseña</Text>
+        <Text style={styles.title3}>Olvidé mi contraseña</Text>
       </View>
-      </ImageBackground>
+    </ImageBackground>
   );
 };
 
