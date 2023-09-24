@@ -2,86 +2,74 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   Button,
   ImageBackground,
   StyleSheet,
-  Alert,
 } from 'react-native';
 import fondo from './assets/4.png';
-import { login } from './componentes/verificador'; // Importa la función login desde api.js
-import { Main } from './componentes/main';
+import LoginScreen from './componentes/InicioSesion';
+import RegisterScreen from './componentes/Register';
 
-const LoginScreen = () => {
-  const [correo, setCorreo] = useState('');
-  const [password, setPassword] = useState('');
-  const [mostrarMain, setMostrarMain] = useState(false); // Estado para controlar si se muestra Main
+const App = () => {
+  const [currentScreen, setCurrentScreen] = useState('home');
 
-  const handleLogin = async () => {
-    if (correo === '' || password === '') {
-      setMostrarMain(true); // Establece el estado para mostrar Main
-    } else {
-      const result = await login(correo, password);
+  const handleLoginButtonClick = () => {
+    setCurrentScreen('login');
+  };
 
-      if (result.success) {
-        Alert.alert('Éxito', result.message);
-        
-        // Aquí puedes realizar acciones adicionales después del inicio de sesión exitoso
-      } else {
-        Alert.alert('Error', result.message);
-      }
+  const handleMainButtonClick = () => {
+    setCurrentScreen('RegisterScreen');
+  };
+
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case 'home':
+        return (
+          <View style={styles.container}>
+            <ImageBackground source={fondo} style={styles.background}>
+              <Text style={[styles.title1, { marginTop: 120 }]}>Bienvenido a Bananashop</Text>
+              <View style={styles.button}>
+              <Button title="Iniciar Sesión" onPress={handleLoginButtonClick}  />
+              </View>
+              <View style={styles.button2}>
+              <Button title="Registrarse" onPress={handleMainButtonClick} />
+              </View>
+              
+            </ImageBackground>
+          </View>
+        );
+      case 'login':
+        return <LoginScreen />;
+      case 'RegisterScreen':
+        return (   
+              <RegisterScreen />
+        );
+      default:
+        return null;
     }
   };
 
-  // Renderiza el componente Main si mostrarMain es true
-  if (mostrarMain) {
-    return <Main />;
-  }
-
   return (
-    <ImageBackground source={fondo} style={styles.background}>
-      <View style={[styles.container]}>
-        <Text style={[styles.title1, { marginTop: 280 },]}>Inicio de sesion</Text>
-        <Text style={[styles.title2,{ marginTop: 30 }]}>Correo</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ingrese su correo electronico"
-          onChangeText={(text) => setCorreo(text)}
-          value={correo}
-        />
-        <Text style={styles.title2}>Contraseña</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ingrese su contraseña"
-          secureTextEntry
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-        />
-        <Button title="Iniciar Sesión" onPress={handleLogin} />
-        <Text style={[styles.title3, { marginTop: 30 }]}>¿No tienes una cuenta? Registrate</Text>
-        <Text style={styles.title3}>Olvidé mi contraseña</Text>
-      </View>
-    </ImageBackground>
+    <View style={styles.container}>
+      {renderScreen()}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   background: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  
-  },
   title1: {
     fontSize: 40,
     marginBottom: 16,
     color: 'white',
+    textAlign: 'center',
 
   },
   title2: {
@@ -109,6 +97,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     textAlign: 'center',
   },
+  button: {
+    marginBottom: 30, // Espacio adicional entre los botones
+  },
+  button2: {
+    marginBottom: 40, // Espacio adicional entre los botones
+  }
 });
 
-export default LoginScreen;
+export default App;
