@@ -44,6 +44,32 @@ def login():
     else:
         return jsonify({'message': 'Inicio de sesión fallido'})
 
+@app.route('/registro', methods=['POST'])
+def registro():
+    conbd()
+
+    # Obtiene los datos del usuario
+    data = request.json
+    nombre = data['nombreG']
+    correo = data['correoG']
+    telefono = data['telefonoG']
+    contrasena = data['contrasenaG']
+
+    # Encripta la contraseña
+    contrasena_encriptada = generate_password_hash(contrasena)
+
+    # Crea el documento JSON para guardar en la base de datos
+    documento = {
+        'nombre': nombre,
+        'correo': correo,
+        'telefono': telefono,
+        'contrasena': contrasena_encriptada,
+    }
+
+    # Guarda los datos del usuario en la base de datos
+    users_collection.insert_one(documento)
+
+    return jsonify({'message': 'Usuario registrado exitosamente'})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

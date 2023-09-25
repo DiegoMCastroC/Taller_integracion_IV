@@ -20,6 +20,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     if (correo === '' || password === '') {
       setMostrarMain(true); // Establece el estado para mostrar Main
+      //Alert.alert('error', 'Por favor, completa los campos.) 
     } else {
       const result = await login(correo, password);
 
