@@ -19,7 +19,8 @@ const LoginScreen = () => {
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const [mostrarMain, setMostrarMain] = useState(false); // Estado para controlar si se muestra Main
-  const [mostrarRegister, sethandleRegistroClick] = useState(false); // Estado para controlar si se muestra Main
+  const [mostrarRegister, setMostrarRegister] = useState(false); // Estado para controlar si se muestra Main
+  
   const handleLogin = async () => {
     if (correo === '' || password === '') {
       setMostrarMain(true); // Establece el estado para mostrar Main
@@ -29,7 +30,7 @@ const LoginScreen = () => {
 
       if (result.success) {
         Alert.alert('Éxito', result.message);
-        
+        setMostrarMain(true);
       } else {
         Alert.alert('Error', result.message);
       }
@@ -37,15 +38,15 @@ const LoginScreen = () => {
   };
 
   const handleRegistroClick = () => {
-    setMostrarMain(true); // Cambia a la pantalla de registro directamente
+    setMostrarRegister(true); // Cambia a la pantalla de registro directamente
   };
 
   
-  if (mostrarRegister) {
+  if (mostrarMain) {
     return <Main />;
   }
 
-  if (mostrarMain) {
+  if (mostrarRegister) {
     return <RegisterScreen />;
   }
 

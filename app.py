@@ -37,7 +37,7 @@ def login():
     conbd()
 
     user = users_collection.find_one({'correo': correo})
-    if user and check_password_hash(user['contra'], password):
+    if user and check_password_hash(user['contrasena'], password):
         user_obj = User(user['_id'])
         login_user(user_obj)
         return jsonify({'message': 'Inicio de sesión exitoso'})
