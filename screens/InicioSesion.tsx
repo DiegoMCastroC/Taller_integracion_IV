@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -7,48 +7,44 @@ import {
   ImageBackground,
   StyleSheet,
   Alert,
-  TouchableOpacity, // Importa TouchableOpacity
 } from 'react-native';
-
-import { login } from './verificador'; // Importa la función login desde api.js
-import { Main } from './main';
+import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../context/AuthContext'; // Importa el contexto de autenticación
 import fondo from '../assets/4.png';
-import { RegisterScreen } from './index'; // Importa RegisterScreen desde la ruta correcta
+import RegisterScreen from './Register';
 
 const LoginScreen = () => {
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
-  const [mostrarMain, setMostrarMain] = useState(false); // Estado para controlar si se muestra Main
-  const [mostrarRegister, setMostrarRegister] = useState(false); // Estado para controlar si se muestra Main
-  
+  const navigation = useNavigation();
+  const { setIsAuthenticated } = useContext(AuthContext); // Accede al estado de autenticación global
+  const [mostrarRegister, setMostrarRegister] = useState(false); 
+
   const handleLogin = async () => {
     if (correo === '' || password === '') {
-      setMostrarMain(true); // Establece el estado para mostrar Main
-      //Alert.alert('error', 'Por favor, completa los campos.) 
+      setIsAuthenticated(true); // Cambia el estado a autenticado cuando el inicio de sesión es exitoso
+      navigation.navigate('Products');
+      Alert.alert('Error', 'Por favor, completa los campos.');
     } else {
       const result = await login(correo, password);
 
       if (result.success) {
         Alert.alert('Éxito', result.message);
-        setMostrarMain(true);
+        setIsAuthenticated(true); // Cambia el estado a autenticado cuando el inicio de sesión es exitoso
+        navigation.navigate('Products'); // Navega a la pantalla de productos
       } else {
         Alert.alert('Error', result.message);
       }
     }
   };
 
-  const handleRegistroClick = () => {
-    setMostrarRegister(true); // Cambia a la pantalla de registro directamente
-  };
-
-  
-  if (mostrarMain) {
-    return <Main />;
-  }
-
   if (mostrarRegister) {
     return <RegisterScreen />;
   }
+
+  const handleRegistroClick = async () => {
+    setMostrarRegister(true);
+  };
 
   return (
     <ImageBackground source={fondo} style={styles.background}>

@@ -1,4 +1,4 @@
-package com.reactnative;
+package com.ta_4_test;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

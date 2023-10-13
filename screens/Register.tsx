@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import fondo from '../assets/4.png';
-import LoginScreen from '../componentes/InicioSesion';
+import LoginScreen from './InicioSesion';
 
 const RegisterScreen = () => {
   const [nombre, setNombre] = useState('');
