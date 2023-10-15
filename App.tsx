@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import Footer from './components/footer';
 import { ProductsList } from './screens/ProductsList';
 import { ProductDetails } from './screens/ProductsDetails';
 import { Cart } from './screens/Cart';
