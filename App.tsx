@@ -11,7 +11,7 @@ import { CartIcon } from './components/CartIcon';
 import { CartProvider } from './components/CartContext';
 import Login from './screens/InicioSesion';
 import { AuthProvider, AuthContext } from './context/AuthContext'; // Importa AuthProvider y AuthContext
-
+import CodigoQR from './components/CodigoQR';
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -42,6 +42,7 @@ function App() {
                 headerRight: () => <CartIcon navigation={navigation}/>,
               })}
             />
+            <Stack.Screen name='CodigoQR' component={CodigoQR} />
           </Stack.Navigator>
         </NavigationContainer>
       </CartProvider>

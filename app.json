@@ -1,4 +1,11 @@
 {
   "name": "ta_4_test",
-  "displayName": "ta_4_test"
+  "displayName": "ta_4_test",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "6fb272a1-b038-4d81-85a5-096113be522b"
+      }
+    }
+  }
 }

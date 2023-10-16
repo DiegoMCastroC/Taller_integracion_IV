@@ -15,7 +15,7 @@ class Footer extends Component {
         <Button
           title="Codigo QR"
           onPress={() => {
-            navigation.navigate('Codigo QR');
+            navigation.navigate('CodigoQR');
           }}
         />
         <Button
