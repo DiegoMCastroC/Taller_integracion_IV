@@ -17,6 +17,7 @@ const RegisterScreen = () => {
   const [correo, setCorreo] = useState('');
   const [telefono, setTelefono] = useState('');
   const [contrasena, setContrasena] = useState('');
+  const [rut, setRUT] = useState('');
   const [mostrarLogin, setMostrarLogin] = useState(false); // Estado para controlar si se muestra Main
 
   const handleRegistro = () => {
@@ -52,6 +53,7 @@ const RegisterScreen = () => {
       correo,
       telefono,
       contrasena,
+      rut,
     };
 
     // Envía los datos del usuario al backend
@@ -78,7 +80,7 @@ const RegisterScreen = () => {
   return (
     <ImageBackground source={fondo} style={styles.background}>
       <View style={styles.container}>
-        <Text style={[styles.title1, { marginTop: 260 }]}>Registro</Text>
+      <Text style={[styles.title1, { marginTop: 210 }]}>Registro</Text>
         <Text style={[styles.title4]}>Nombre y apellido</Text>
         <TextInput style={styles.input} placeholder="Nombre y apellido" onChangeText={(text) => setNombre(text)} />
         <Text style={[styles.title4]}>Correo electrónico</Text>
@@ -87,6 +89,9 @@ const RegisterScreen = () => {
         <TextInput style={styles.input} placeholder="Número de Teléfono" keyboardType="phone-pad" onChangeText={(text) => setTelefono(text)} />
         <Text style={[styles.title4]}>Contraseña</Text>
         <TextInput style={styles.input} placeholder="Contraseña" secureTextEntry onChangeText={(text) => setContrasena(text)} />
+        <Text style={[styles.title4]}>Rut sin guion</Text>
+        <TextInput style={styles.input} placeholder="rut" keyboardType="phone-pad" onChangeText={(text) => setRUT(text)} />
+
         <Button title="Registrarse" onPress={handleRegistro} />
         <Text style={[styles.title4, { marginTop: 10 }]}>¿Ya tienes una cuenta?{' '}
           <Text
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title1: {
-    fontSize: 40,
+    fontSize: 30,
     marginBottom: 16,
     color: 'white',
   },

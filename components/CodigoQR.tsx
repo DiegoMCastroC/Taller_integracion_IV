@@ -3,7 +3,6 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import { StyleSheet, View, Alert, TouchableOpacity, Text } from 'react-native';
 
-
 export const CodigoQR = () => {
   const [qrData, setQrData] = useState<string | null>(null);
   const qrScannerRef = useRef<QRCodeScanner | null>(null);
