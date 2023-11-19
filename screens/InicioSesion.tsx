@@ -22,18 +22,30 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     if (correo === '' || password === '') {
-      setIsAuthenticated(true); // Cambia el estado a autenticado cuando el inicio de sesión es exitoso
+      setIsAuthenticated(true);
       navigation.navigate('Products');
       Alert.alert('Error', 'Por favor, completa los campos.');
     } else {
-      const result = await login(correo, password);
-
-      if (result.success) {
-        Alert.alert('Éxito', result.message);
-        setIsAuthenticated(true); // Cambia el estado a autenticado cuando el inicio de sesión es exitoso
-        navigation.navigate('Products'); // Navega a la pantalla de productos
-      } else {
-        Alert.alert('Error', result.message);
+      try {
+        const response = await fetch('https://flask-ta4.onrender.com/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ correo, contrasena: password })
+        });
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          Alert.alert('Éxito', result.message);
+          setIsAuthenticated(true);
+          navigation.navigate('Products');
+        } else {
+          Alert.alert('Error', result.message);
+        }
+      } catch (error) {
+        console.error('Error al iniciar sesión', error);
       }
     }
   };

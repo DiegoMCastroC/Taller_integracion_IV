@@ -48,14 +48,14 @@ const RegisterScreen = () => {
 
     // Crea el documento JSON para guardar en la base de datos
     const documento = {
-      nombreG,
-      correoG,
-      telefonoG,
-      contrasenaG,
+      nombre,
+      correo,
+      telefono,
+      contrasena,
     };
 
     // Envía los datos del usuario al backend
-    fetch('http://192.168.0.14:5000/registro', {
+    await fetch('https://flask-ta4.onrender.com/registro', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

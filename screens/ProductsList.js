@@ -1,34 +1,40 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { Product } from '../components/Product';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { getProducts } from '../services/ProductsService.js';
 import Footer from '../components/footer';
 
 export function ProductsList ({navigation}) {
-  function renderProduct({item: product}) {
-    return (
-      <Product {...product} 
-      onPress={() => {
-        navigation.navigate('ProductDetails', {
-          productId: product.id,
-        });
-      }}
-      />
-    );
-  }
-
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    setProducts(getProducts());
-  });
+    async function fetchProducts() {
+      const products = await getProducts();
+      console.log(products); // Añade esta línea
+      setProducts(products);
+    }
+    fetchProducts();
+  }, []);
+
+  function renderProduct({item: product}) {
+    return (
+      <TouchableOpacity style={styles.product} onPress={() => {
+        navigation.navigate('ProductDetails', {
+          productId: product._id,
+        });
+      }}>
+        <Image style={styles.image} source={{ uri: product.url }} />
+        <Text style={styles.productName}>{product.nombre}</Text>
+        <Text style={styles.productPrice}>{product.costo}</Text>
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
         style={styles.productsList}
         contentContainerStyle={styles.productsListContainer}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id}
         data={products}
         renderItem={renderProduct}
       />
@@ -48,5 +54,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#eeeeee',
     paddingVertical: 8,
     marginHorizontal: 8,
+  },
+  product: {
+    padding: 10,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
+  productName: {
+    fontSize: 18,
+  },
+  productPrice: {
+    fontSize: 16,
+    color: '#888',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 });

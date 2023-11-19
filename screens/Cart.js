@@ -1,8 +1,66 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
-import { CartContext } from '../components/CartContext';
-export function Cart ({navigation}) {
-const {items, getItemsCount, getTotalPrice} = useContext(CartContext);
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { View, Text, FlatList, StyleSheet} from 'react-native';
+import { getProduct } from '../services/ProductsService.js';
+
+
+export const CartContext = createContext();
+
+export function CartProvider({ children }) {
+  const [items, setItems] = useState([]);
+
+  async function addItemToCart(_id) {
+    const product = await getProduct(_id);
+    setItems((prevItems) => {
+      const item = prevItems.find((item) => item._id == _id);
+      if (!item) {
+        return [...prevItems, {
+          _id,
+          qty: 1,
+          product,
+          totalPrice: parseFloat(product.costo)
+        }];
+      } else {
+        return prevItems.map((item) => {
+          if (item._id == _id) {
+            item.qty++;
+            item.totalPrice += parseFloat(product.costo);
+          }
+          return item;
+        });
+      }
+    });
+  }
+
+  function getItemsCount() {
+    return items.reduce((sum, item) => sum + item.qty, 0);
+  }
+
+  function getTotalPrice() {
+    return items.reduce((sum, item) => sum + item.totalPrice, 0);
+  }
+
+  return (
+    <CartContext.Provider value={{ items, setItems, getItemsCount, addItemToCart, getTotalPrice }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export function CartIcon({navigation}) {
+  const {getItemsCount} = useContext(CartContext);
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text} 
+        onPress={() => {
+          navigation.navigate('Cart');
+        }}
+      >Cart ({getItemsCount()})</Text>
+    </View>
+  );
+}
+
+export function Cart({ navigation }) {
+  const { items, getItemsCount, getTotalPrice } = useContext(CartContext);
 
   function Totals() {
     let [total, setTotal] = useState(0);
@@ -10,32 +68,38 @@ const {items, getItemsCount, getTotalPrice} = useContext(CartContext);
       setTotal(getTotalPrice());
     });
     return (
-       <View style={styles.cartLineTotal}>
-          <Text style={[styles.lineLeft, styles.lineTotal]}>Total</Text>
-          <Text style={styles.lineRight}>$ {total}</Text>
-       </View>
+      <View style={styles.cartLineTotal}>
+        <Text style={[styles.lineLeft, styles.lineTotal]}>Total</Text>
+        <Text style={styles.lineRight}>$ {total}</Text>
+      </View>
     );
   }
-function renderItem({item}) {
+
+  function renderItem({ item }) {
     return (
-       <View style={styles.cartLine}>
-          <Text style={styles.lineLeft}>{item.product.name} x {item.qty}</Text>
-          <Text style={styles.lineRight}>$ {item.totalPrice}</Text>
-       </View>
+      <View style={styles.cartLine}>
+        <Text style={styles.lineLeft}>{item.product.nombre} x {item.qty}</Text>
+        <Text style={styles.lineRight}>$ {item.totalPrice}</Text>
+      </View>
     );
   }
 
   return (
-    <FlatList
-      style={styles.itemsList}
-      contentContainerStyle={styles.itemsListContainer}
-      data={items}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.product.id.toString()}
-      ListFooterComponent={Totals}
-    />
+    <View>
+      <CartIcon navigation={navigation} />
+      <FlatList
+        style={styles.itemsList}
+        contentContainerStyle={styles.itemsListContainer}
+        data={items}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.product._id}
+        ListFooterComponent={Totals}
+      />
+    </View>
   );
 }
+
+// ... estilos ...
 const styles = StyleSheet.create({
   cartLine: { 
     flexDirection: 'row',
@@ -68,5 +132,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#eeeeee',
     paddingVertical: 8,
     marginHorizontal: 8,
+  },
+  container: {
+    marginHorizontal: 8,
+    backgroundColor: 'orange',
+    height: 32,
+    padding: 20,
+    borderRadius: 32 / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'white',
+    fontWeight: 'bold',
+    height: 20,
   },
 });

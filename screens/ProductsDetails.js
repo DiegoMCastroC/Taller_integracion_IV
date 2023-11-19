@@ -9,7 +9,8 @@ import {
   StyleSheet
   } from 'react-native';
 import { getProduct } from '../services/ProductsService.js';
-import { CartContext } from '../components/CartContext.js';
+import { CartContext } from './Cart.js';
+
 export function ProductDetails({route}) {
   const { productId } = route.params;
   const [product, setProduct] = useState({});
@@ -17,33 +18,39 @@ export function ProductDetails({route}) {
   const { addItemToCart } = useContext(CartContext);
 
   useEffect(() => {
-    setProduct(getProduct(productId));
-  });
+    async function fetchProduct() {
+      const product = await getProduct(productId);
+      setProduct(product);
+    }
+
+    fetchProduct();
+  }, [productId]);
 
   function onAddToCart() {
-    addItemToCart(product.id);
+    addItemToCart(product._id);
   }
 
   return (
     <SafeAreaView>
       <ScrollView>
-        <Image
-          style={styles.image}
-          source={product.image}
-        />
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>{product.name}</Text>
-          <Text style={styles.price}>$ {product.price}</Text>
-          <Text style={styles.description}>{product.description}</Text>
+          <Image style={styles.image} source={{ uri: product.url }} />
+          <Text style={styles.name}>{product.nombre}</Text>
+          <Text style={styles.price}>$ {product.costo}</Text>
+          <Text style={styles.description}>Marca: {product.marca}</Text>
+          <Text style={styles.description}>Genero: {product.genero}</Text>
+          <Text style={styles.description}>Talla: {product.talla}</Text>
+          <Text style={styles.description}>Color: {product.color}</Text>
             <Button
             onPress={onAddToCart}
             title="Add to cart"
-            / >
+            />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
@@ -79,5 +86,12 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#787878',
     marginBottom: 16,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 });

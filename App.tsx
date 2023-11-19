@@ -6,9 +6,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Footer from './components/footer';
 import { ProductsList } from './screens/ProductsList';
 import { ProductDetails } from './screens/ProductsDetails';
-import { Cart } from './screens/Cart';
-import { CartIcon } from './components/CartIcon';
-import { CartProvider } from './components/CartContext';
+import { CartIcon ,CartProvider , Cart } from './screens/Cart';
+//import { CartIcon } from './components/CartIcon';
+//import { CartProvider } from './components/CartContext';
 import Login from './screens/InicioSesion';
 import { AuthProvider, AuthContext } from './context/AuthContext'; // Importa AuthProvider y AuthContext
 import CodigoQR from './components/CodigoQR';
