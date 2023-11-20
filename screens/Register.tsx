@@ -7,6 +7,7 @@ import {
   ImageBackground,
   StyleSheet,
   Alert,
+  ScrollView
 } from 'react-native';
 
 import fondo from '../assets/4.png';
@@ -74,6 +75,7 @@ const RegisterScreen = () => {
 
   return (
     <ImageBackground source={fondo} style={styles.background}>
+      <ScrollView>
       <View style={styles.container}>
         <Text style={[styles.title1, { marginTop: 260 }]}>Registro</Text>
         <Text style={[styles.title4]}>Nombre y apellido</Text>
@@ -98,6 +100,7 @@ const RegisterScreen = () => {
           </Text>
         </Text>
       </View>
+      </ScrollView>
     </ImageBackground>
   );
 };
