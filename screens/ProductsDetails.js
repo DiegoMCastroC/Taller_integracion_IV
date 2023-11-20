@@ -75,17 +75,20 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 22,
     fontWeight: 'bold',
+    color: 'black',
   },
   price: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
+    color: 'black',
   },
   description: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '400',
     color: '#787878',
     marginBottom: 16,
+    color: 'black',
   },
   image: {
     width: 200,

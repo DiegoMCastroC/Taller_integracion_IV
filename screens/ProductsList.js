@@ -24,7 +24,7 @@ export function ProductsList ({navigation}) {
       }}>
         <Image style={styles.image} source={{ uri: product.url }} />
         <Text style={styles.productName}>{product.nombre}</Text>
-        <Text style={styles.productPrice}>{product.costo}</Text>
+        <Text style={styles.productPrice}>${product.costo}</Text>
       </TouchableOpacity>
     );
   }
@@ -62,10 +62,11 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 18,
+    color: 'black',
   },
   productPrice: {
     fontSize: 16,
-    color: '#888',
+    color: 'black',
   },
   image: {
     width: 200,

@@ -18,6 +18,7 @@ const RegisterScreen = () => {
   const [telefono, setTelefono] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [rut, setRUT] = useState('');
+  const [direccion, setDireccion] = useState('');
   const [mostrarLogin, setMostrarLogin] = useState(false); // Estado para controlar si se muestra Main
 
   const handleRegistro = () => {
@@ -40,13 +41,6 @@ const RegisterScreen = () => {
 
   const guardarDatosUsuario = async () => {
     // Aquí va el código para guardar los datos del usuario en la base de datos
-    // Obtiene los datos del usuario
-    const nombreG = nombre;
-    const correoG = correo;
-    const telefonoG = telefono;
-    const contrasenaG = contrasena;
-
-
     // Crea el documento JSON para guardar en la base de datos
     const documento = {
       nombre,
@@ -54,6 +48,7 @@ const RegisterScreen = () => {
       telefono,
       contrasena,
       rut,
+      direccion,
     };
 
     // Envía los datos del usuario al backend
@@ -80,7 +75,7 @@ const RegisterScreen = () => {
   return (
     <ImageBackground source={fondo} style={styles.background}>
       <View style={styles.container}>
-      <Text style={[styles.title1, { marginTop: 210 }]}>Registro</Text>
+        <Text style={[styles.title1, { marginTop: 260 }]}>Registro</Text>
         <Text style={[styles.title4]}>Nombre y apellido</Text>
         <TextInput style={styles.input} placeholder="Nombre y apellido" onChangeText={(text) => setNombre(text)} />
         <Text style={[styles.title4]}>Correo electrónico</Text>
@@ -91,7 +86,8 @@ const RegisterScreen = () => {
         <TextInput style={styles.input} placeholder="Contraseña" secureTextEntry onChangeText={(text) => setContrasena(text)} />
         <Text style={[styles.title4]}>Rut sin guion</Text>
         <TextInput style={styles.input} placeholder="rut" keyboardType="phone-pad" onChangeText={(text) => setRUT(text)} />
-
+        <Text style={[styles.title4]}>Direccion</Text>
+        <TextInput style={styles.input} placeholder="direccion" keyboardType="phone-pad" onChangeText={(text) => setDireccion(text)} />
         <Button title="Registrarse" onPress={handleRegistro} />
         <Text style={[styles.title4, { marginTop: 10 }]}>¿Ya tienes una cuenta?{' '}
           <Text
@@ -119,7 +115,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title1: {
-    fontSize: 30,
+    fontSize: 40,
     marginBottom: 16,
     color: 'white',
   },

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, StyleSheet} from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button, Alert} from 'react-native';
 import { getProduct } from '../services/ProductsService.js';
 
 
@@ -60,7 +60,7 @@ export function CartIcon({navigation}) {
 }
 
 export function Cart({ navigation }) {
-  const { items, getItemsCount, getTotalPrice } = useContext(CartContext);
+  const { items, getItemsCount, getTotalPrice, setItems } = useContext(CartContext);
 
   function Totals() {
     let [total, setTotal] = useState(0);
@@ -76,12 +76,34 @@ export function Cart({ navigation }) {
   }
 
   function renderItem({ item }) {
+    function eliminarProducto(_id) {
+      setItems((prevItems) => {
+        return prevItems.map((product) => {
+          if (product._id === _id) {
+            if (product.qty > 1) {
+              const newQty = product.qty - 1;
+              const newTotalPrice = (product.totalPrice/product.qty)*newQty;
+              return { ...product, qty: newQty, totalPrice: newTotalPrice};
+            } else if (product.qty === 1) {
+              return { ...product, qty: 0, totalPrice: 0 };
+            }
+          }
+          return product;
+        }).filter((product) => product.qty > 0);
+      });
+    }
+
     return (
       <View style={styles.cartLine}>
         <Text style={styles.lineLeft}>{item.product.nombre} x {item.qty}</Text>
         <Text style={styles.lineRight}>$ {item.totalPrice}</Text>
+        <Button title="Eliminar" onPress={() => eliminarProducto(item._id)} />
       </View>
     );
+  }
+
+  function Comprar() {
+    Alert.alert('Error', 'En construccion, lamentamos las molestias')
   }
 
   return (
@@ -95,6 +117,10 @@ export function Cart({ navigation }) {
         keyExtractor={(item) => item.product._id}
         ListFooterComponent={Totals}
       />
+      <Button
+            onPress={Comprar}
+            title="Comprar"
+            />
     </View>
   );
 }
